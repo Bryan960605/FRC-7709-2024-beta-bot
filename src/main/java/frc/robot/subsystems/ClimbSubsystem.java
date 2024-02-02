@@ -4,36 +4,43 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase {
   /** Creates a new ClimbSubsystem. */
-  private final WPI_VictorSPX climeLeftMotor = new WPI_VictorSPX(56);
-  private final WPI_VictorSPX climbRightMotor = new WPI_VictorSPX(45);
+  private final CANSparkMax climbRightMotor = new CANSparkMax(12, MotorType.kBrushless);
+  private final CANSparkMax climbLeftMotor = new CANSparkMax(51, MotorType.kBrushless);
 
   private final Servo rightServo = new Servo(0);
   private final Servo leftServo = new Servo(9);
 
   public boolean climbDone = false;
   public ClimbSubsystem() {
-    climbRightMotor.setInverted(true);
-    climeLeftMotor.setInverted(false);
+    climbRightMotor.restoreFactoryDefaults();
+    climbLeftMotor.restoreFactoryDefaults();
 
-    climbRightMotor.setNeutralMode(NeutralMode.Brake);
-    climeLeftMotor.setNeutralMode(NeutralMode.Brake);
+    climbRightMotor.setInverted(true);
+    climbLeftMotor.setInverted(false);
+
+    climbRightMotor.setIdleMode(IdleMode.kBrake);
+    climbLeftMotor.setIdleMode(IdleMode.kBrake);
+
+    climbRightMotor.burnFlash();
+    climbLeftMotor.burnFlash();
   }
 
   public void climbMove(double leftSpeed, double rightSpeed){
     if(climbDone == false){
-      climeLeftMotor.set(leftSpeed);
+      climbLeftMotor.set(leftSpeed);
       climbRightMotor.set(rightSpeed);
     }
     else{
-      climeLeftMotor.set(0);
+      climbLeftMotor.set(0);
       climbRightMotor.set(0);
     }
   }

@@ -31,7 +31,7 @@ public final class Constants {
     public static final int inButtonNumber = 2;
     public static final int ampButtonNumber = 3;
     public static final int primetiveButtonNumber = 4;
-    public static final int climbDoneButtonNuber = 5;
+    public static final int climbDoneButtonNumber = 5;
     public static final int aimButtonNumber = 5;
     public static final int resetGyroButtonNumber = 2;
   }

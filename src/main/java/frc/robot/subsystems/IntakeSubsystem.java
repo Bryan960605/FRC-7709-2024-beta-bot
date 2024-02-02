@@ -90,7 +90,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     //Motor move
     intakeTurnMotor.setVoltage(intakeTurnSpeedSetpoint/5676*12 + intakeTurnPIDOutput);
-    if(intakeShaftErrorValue < 2){
+    if(intakeShaftErrorValue > 2){
       intakeShaftMotor.set(intakeShaftPIDOutput + intakeShaftFeedforwardOutput);
     }
     else{

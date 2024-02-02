@@ -21,6 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   private final CANSparkMax shooterTurnMotor = new CANSparkMax(45, MotorType.kBrushless);
   private final CANSparkMax shooterShafMotor = new CANSparkMax(48, MotorType.kBrushless);
+  private final CANSparkMax shooterTransportMotor = new CANSparkMax(2, MotorType.kBrushless);
 
   private final CANcoder shooterShaftCancoder = new CANcoder(54);
   private final CANcoderConfiguration shooterShaftCancoderCofig = new CANcoderConfiguration();
@@ -48,15 +49,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     shooterTurnMotor.restoreFactoryDefaults();
     shooterShafMotor.restoreFactoryDefaults();
+    shooterTransportMotor.restoreFactoryDefaults();
 
     shooterTurnMotor.setInverted(false);
     shooterShafMotor.setInverted(false);
+    shooterTransportMotor.setInverted(false);
 
     shooterTurnMotor.setIdleMode(IdleMode.kCoast);
     shooterShafMotor.setIdleMode(IdleMode.kBrake);
+    shooterTransportMotor.setIdleMode(IdleMode.kCoast);
 
     shooterTurnMotor.burnFlash();
     shooterShafMotor.burnFlash();
+    shooterTransportMotor.burnFlash();
 
     shooterShaftCancoderCofig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     shooterShaftCancoderCofig.MagnetSensor.MagnetOffset = shooterCancoderOffset;
@@ -66,7 +71,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shooterMotorTurn(){
-    shooterTurnMotor.setVoltage(9.6 + shooterTurnPIDOutput);
+    if(shooterTurnSpeed > (shooterTurnSetpoint - 100)){
+      shooterTransportMotor.setVoltage(6);
+      shooterTransportMotor.setVoltage(6);
+    }
+    else{
+      shooterTurnMotor.setVoltage(9.6 + shooterTurnPIDOutput);
+      shooterTransportMotor.setVoltage(0);
+    }
   }
 
   public void getShooterShaftsetpoint(double angleSetpoint){
@@ -85,7 +97,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterShaftPIDOutput = shooterShaftPID.calculate(change2AngularVelocity, shooterShaftSetpoint);
     shooterShaftFeedforwardOutput = shooterShaftFeedforward.calculate(shooterShaftRadians, shooterShaftAngularVelocity)/12;
 
-    shooterTurnMotor.setVoltage(shooterTurnSetpoint/5676*12 + shooterTurnPIDOutput);
     if(shooterShaftErrorvalue > 2){
       shooterShafMotor.set(shooterShaftPIDOutput + shooterShaftFeedforwardOutput);
     }
