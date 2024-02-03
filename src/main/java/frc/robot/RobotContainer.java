@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AimCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -32,6 +33,7 @@ public class RobotContainer {
 
   private final ManualDriveCommand m_manualDriveCommand = new ManualDriveCommand(m_swerveSubsystem);
   private final ClimbCommand m_climbCommand = new ClimbCommand(m_climbSubsystem);
+  private final AimCommand m_aimCommand = new AimCommand(m_visionSubsystem);
 
   private final Joystick armJoystick = new Joystick(1);
   public static final Joystick baseJoystick = new Joystick(0);
@@ -63,6 +65,8 @@ public class RobotContainer {
     shootButton.whileTrue(Commands.runOnce(()->{
       m_shooterSubsystem.shooterMotorTurn();
     }, m_shooterSubsystem));
+
+    aimButton.whileTrue(m_aimCommand);
   }
 
   /**

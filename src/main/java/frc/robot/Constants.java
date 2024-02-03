@@ -55,21 +55,23 @@ public final class Constants {
     public static final double limelightToArmDistance = 0;
     public static final double armAndEndEffectorAngle = 120.0;
 
-    // public static double[] redModeSelect(int targetID){
-    //   double[] setpoint = new double[4];
-    //   switch (targetID) {
-    //     case redAMPID:
-    //       setpoint = new double[]{allSetpoint.amp.armSetpoint, allSetpoint.amp.xSetpoint, allSetpoint.amp.ySetpoint, allSetpoint.amp.zSetpoint};
-    //       break;
-    //     case redSourceLeftID:
-    //       setpoint = new double[]{allSetpoint.sourceLeft.armSetpoint, allSetpoint.sourceLeft.xSetpoint, allSetpoint.sourceLeft.ySetpoint, allSetpoint.sourceLeft.zSetpoint};
-    //     default:
-    //       setpoint = new double[]{0.0, 0.0, 0.0, 0.0};
-    //       break;
+    public static double[] redModeSelect(int targetID){
+      double[] setpoint = new double[4];
+      switch (targetID) {
+        case redAMPID:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
+        case redSourceLeftID:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
+        default:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
         
-    //   }
-    //   return setpoint;
-    // }
+      }
+      return setpoint;
+    }
+
   }
 
   public static final class SwerveModuleConstants{
