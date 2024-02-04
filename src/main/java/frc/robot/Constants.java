@@ -36,6 +36,16 @@ public final class Constants {
     public static final int resetGyroButtonNumber = 2;
   }
 
+  public static final class IntakeConstants{
+    public static final double intakeInPosition = 0.0;
+    public static final double intakePrimetivePosition = 0.0;
+  }
+
+  public static final class ShooterConstants{
+    public static final double shooterPrimetivePosition = 0.0;
+    public static final double shooterSpeedSetpoint = 4580;
+  }
+
   public static final class ApriltagConstants{
     public static final int blueSpeakerCenterID = 7;
     public static final int blueSpeakerLeftID = 8;

@@ -5,11 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class shooterCommand extends Command {
   /** Creates a new shooterCommand. */
-  public shooterCommand() {
+  private final ShooterSubsystem shooterSubsystem;
+  public shooterCommand(ShooterSubsystem _shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.shooterSubsystem = _shooterSubsystem;
   }
 
   // Called when the command is initially scheduled.

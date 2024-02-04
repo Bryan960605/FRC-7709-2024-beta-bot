@@ -12,6 +12,7 @@ public class AimCommand extends Command {
   private final VisionSubsystem visionSubsystem;
   public AimCommand(VisionSubsystem _visionSubsystem) {
     this.visionSubsystem = _visionSubsystem;
+    addRequirements(visionSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

@@ -17,6 +17,8 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants.ShooterConstants;
+
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   private final CANSparkMax shooterTurnMotor = new CANSparkMax(45, MotorType.kBrushless);
@@ -42,7 +44,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private double shooterShaftAngularVelocity;
   private double shooterShaftSetpoint;
   private double shooterShaftErrorvalue;
-  private final double shooterTurnSetpoint = 4540;
   private final double shooterCancoderOffset = 0;
   private final double change2AngularVelocity = 1*2*Math.PI/60;
 
@@ -71,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shooterMotorTurn(){
-    if(shooterTurnSpeed > (shooterTurnSetpoint - 100)){
+    if(shooterTurnSpeed > (ShooterConstants.shooterSpeedSetpoint - 100)){
       shooterTransportMotor.setVoltage(6);
       shooterTransportMotor.setVoltage(6);
     }
@@ -93,7 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTurnSpeed = shooterTurnEncoder.getVelocity();
     shooterShaftErrorvalue = shooterShaftSetpoint - shooterShaftAngle;
 
-    shooterTurnPIDOutput = shooterTurnPID.calculate(shooterTurnSpeed, shooterTurnSetpoint);
+    shooterTurnPIDOutput = shooterTurnPID.calculate(shooterTurnSpeed, ShooterConstants.shooterSpeedSetpoint);
     shooterShaftPIDOutput = shooterShaftPID.calculate(change2AngularVelocity, shooterShaftSetpoint);
     shooterShaftFeedforwardOutput = shooterShaftFeedforward.calculate(shooterShaftRadians, shooterShaftAngularVelocity)/12;
 

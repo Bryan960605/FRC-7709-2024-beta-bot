@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private double intakeShaftRadians;
   private double intakeShaftAngularVelocity;
   private final double change2AngularVelocity = 1*2*Math.PI/60;
-  private double intakeTurnSpeedSetpoint = 0;
+  private double intakeTurnSpeedSetpoint = 3000;
   private double intakeTurnSpeed;
   private double intakeShaftPIDOutput;
   private double intakeTurnPIDOutput;
@@ -43,6 +43,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private double intakeShaftSetpoint;
   private double intakeShaftCancoderOffset;
   private double intakeShaftErrorValue;
+  private boolean turn;
   public IntakeSubsystem() {
     intakeTurnMotor.restoreFactoryDefaults();
     intakeShaftMotor.restoreFactoryDefaults();
@@ -67,14 +68,10 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeShaftSetpoint = angleSetpoint;
   }
 
-  public void getintakespeedSetpoint(boolean shouldTurn){
-    if(shouldTurn){
-      intakeTurnSpeedSetpoint = 3000;
-    }
-    else{
-      intakeTurnSpeedSetpoint = 0;
-    }
+  public void shouldturn(boolean shouldTurn){
+    turn = shouldTurn;
   }
+
 
   @Override
   public void periodic() {
@@ -89,7 +86,12 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeShaftFeedforwardOutput = intakeShaftFeedforward.calculate(intakeShaftRadians, intakeShaftAngularVelocity)/12;
     
     //Motor move
-    intakeTurnMotor.setVoltage(intakeTurnSpeedSetpoint/5676*12 + intakeTurnPIDOutput);
+    if(turn){
+      intakeTurnMotor.setVoltage(intakeTurnSpeedSetpoint/5676*12 + intakeTurnPIDOutput);
+    }
+    else{
+      intakeTurnMotor.setVoltage(0);
+    }
     if(intakeShaftErrorValue > 2){
       intakeShaftMotor.set(intakeShaftPIDOutput + intakeShaftFeedforwardOutput);
     }
