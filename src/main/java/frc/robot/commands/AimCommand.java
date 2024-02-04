@@ -5,14 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class AimCommand extends Command {
   /** Creates a new AimCommand. */
   private final VisionSubsystem visionSubsystem;
-  public AimCommand(VisionSubsystem _visionSubsystem) {
+  private final ShooterSubsystem shooterSubsystem;
+  private final SwerveSubsystem swerveSubsystem;
+  public AimCommand(VisionSubsystem _visionSubsystem, ShooterSubsystem _shooterSubsystem, SwerveSubsystem __swerveSubsystem) {
     this.visionSubsystem = _visionSubsystem;
-    addRequirements(visionSubsystem);
+    this.shooterSubsystem = _shooterSubsystem;
+    this.swerveSubsystem = __swerveSubsystem;
+    addRequirements(visionSubsystem, shooterSubsystem, swerveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

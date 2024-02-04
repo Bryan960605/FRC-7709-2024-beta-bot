@@ -25,7 +25,7 @@ public class ManualDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(baseJoystick.getRawButton(6)){
+    if(baseJoystick.rightBumper().getAsBoolean()){
       xSpeed = baseJoystick.getRawAxis(1)*0.4;
       ySpeed = baseJoystick.getRawAxis(0)*0.4;
       zSpeed = baseJoystick.getRawAxis(4)*0.4;
