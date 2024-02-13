@@ -67,7 +67,7 @@ public final class Constants {
     public static final double armAndEndEffectorAngle = 120.0;
 
     public static double[] redModeSelect(int targetID){
-      double[] setpoint = new double[4];
+      double[] setpoint;
       switch (targetID) {
         case redAMPID:
           setpoint = new double[]{0, 0, 0, 0};
@@ -75,6 +75,26 @@ public final class Constants {
         case redSourceLeftID:
           setpoint = new double[]{0, 0, 0, 0};
           break;
+        case redSpeakerCenterID,redRightSpeakerID , redSourceRightID:
+          setpoint = new double[]{0,0,0,0}; 
+        default:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
+        
+      }
+      return setpoint;
+    }
+    public static double[] blueModeSelect(int targetID){
+      double[] setpoint;
+      switch (targetID) {
+        case blueAMPID:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
+        case blueSourceLeftID:
+          setpoint = new double[]{0, 0, 0, 0};
+          break;
+        case blueSpeakerCenterID, blueSpeakerLeftID, bluesourceRightID:
+          setpoint = new double[]{0,0,0,0}; 
         default:
           setpoint = new double[]{0, 0, 0, 0};
           break;
