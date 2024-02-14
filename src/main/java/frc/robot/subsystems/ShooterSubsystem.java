@@ -44,6 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private double shooterShaftAngularVelocity;
   private double shooterShaftSetpoint;
   private double shooterShaftErrorvalue;
+  private double distance;
+
   private final double shooterCancoderOffset = 0;
   private final double change2AngularVelocity = 1*2*Math.PI/60;
 
@@ -85,7 +87,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void getShooterShaftsetpoint(double angleSetpoint){
     shooterShaftSetpoint = angleSetpoint;
   }
-
   @Override
   public void periodic() {
     shooterShaftAngle = shooterShaftCancoder.getAbsolutePosition().getValueAsDouble();
@@ -95,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterShaftErrorvalue = shooterShaftSetpoint - shooterShaftAngle;
 
     shooterTurnPIDOutput = shooterTurnPID.calculate(shooterTurnSpeed, ShooterConstants.shooterSpeedSetpoint);
-    shooterShaftPIDOutput = shooterShaftPID.calculate(change2AngularVelocity, shooterShaftSetpoint);
+    shooterShaftPIDOutput = shooterShaftPID.calculate(shooterShaftAngle, shooterShaftSetpoint);
     shooterShaftFeedforwardOutput = shooterShaftFeedforward.calculate(shooterShaftRadians, shooterShaftAngularVelocity)/12;
 
     if(shooterShaftErrorvalue > 2){
