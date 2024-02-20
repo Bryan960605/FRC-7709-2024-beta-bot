@@ -6,16 +6,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class IntakeCommand extends Command {
   /** Creates a new IntakeCommand. */
   private final IntakeSubsystem intakeSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
   private double setpoint;
   private boolean needTurn;
-  public IntakeCommand(IntakeSubsystem _intakeSubsystem, double _setpoint, boolean _needTurn) {
+  private double indexerSpeed;
+  public IntakeCommand(IntakeSubsystem _intakeSubsystem, ShooterSubsystem _shooterSubsystem, double _setpoint, boolean _needTurn, double _indexerSpeed) {
     this.intakeSubsystem = _intakeSubsystem;
+    this.shooterSubsystem = _shooterSubsystem;
     this.setpoint = _setpoint;
     this.needTurn = _needTurn;
+    this.indexerSpeed = _indexerSpeed;
     addRequirements(intakeSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,6 +34,7 @@ public class IntakeCommand extends Command {
   public void execute() {
     intakeSubsystem.getintakeShaftSetpoint(setpoint);
     intakeSubsystem.shouldturn(needTurn);
+    shooterSubsystem.shooterTransportMotorSpeed(indexerSpeed);
   }
 
   // Called once the command ends or is interrupted.

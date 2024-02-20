@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import static frc.robot.Constants.*;
 import static frc.robot.Constants.ApriltagConstants.*;
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new Visionsubsystem. */
@@ -58,14 +57,26 @@ public class VisionSubsystem extends SubsystemBase {
     result = photonLimelight.getLatestResult();
     target = result.getBestTarget();
     hasTarget = result.hasTargets();
-    targetID = target.hashCode();  //IDK
+    targetID = target.getFiducialId();  //IDK
 
-    botXValue = target.getBestCameraToTarget().getX();
-    botYValue = target.getBestCameraToTarget().getY();
-    botZValue = target.getYaw();
+    if(hasTarget){
+      botXValue = result.getBestTarget().getBestCameraToTarget().getX();
+      botYValue = result.getBestTarget().getBestCameraToTarget().getY();
+      if(targetID == redSpeakerCenterID || targetID == redSpeakerRightID || targetID == blueSpeakerCenterID || targetID == blueSpeakerLeftID){
+        botZValue = result.getBestTarget().getYaw();
+      }
+      else{
+        botZValue = result.getBestTarget().getBestCameraToTarget().getRotation().getAngle();
+      }
+    }
+    else{
+      botXValue = xSetpoint;
+      botYValue = ySetpoint;
+      botZValue = zSetpoint;
+    }
 
-    yMovePIDOutput = yMovePID.calculate(botYValue, xSetpoint);
-    xMovePIDOutput = xMovePID.calculate(botXValue, ySetpoint);
+    yMovePIDOutput = yMovePID.calculate(botXValue, xSetpoint);
+    xMovePIDOutput = xMovePID.calculate(botYValue, ySetpoint);
     turnPIDOutput = -turnPID.calculate(botZValue, zSetpoint);
 
     xMovePIDOutput = Constants.setMaxOutput(xMovePIDOutput, maxXMovepPIDOutput);

@@ -13,8 +13,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ShooterConstants;
@@ -29,25 +29,21 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANcoderConfiguration shooterShaftCancoderCofig = new CANcoderConfiguration();
 
   private final PIDController shooterShaftPID = new PIDController(0, 0, 0);
-  private final PIDController shooterTurnPID = new PIDController(0, 0, 0);
-  private final ArmFeedforward shooterShaftFeedforward = new ArmFeedforward(0, 0, 0, 0);
   
-  private final RelativeEncoder shooterSheftEncoder = shooterShafMotor.getEncoder();
   private final RelativeEncoder shooterTurnEncoder = shooterTurnMotor.getEncoder();
 
+  private final DigitalInput redline = new DigitalInput(0);
+
   private double shooterTurnSpeed;
-  private double shooterShaftFeedforwardOutput;
   private double shooterShaftPIDOutput;
-  private double shooterTurnPIDOutput;
   private double shooterShaftAngle;
-  private double shooterShaftRadians;
-  private double shooterShaftAngularVelocity;
   private double shooterShaftSetpoint;
   private double shooterShaftErrorvalue;
-  private double distance;
+  private boolean haveNote;
+
+  private double shooterTransportSpeed = 0;
 
   private final double shooterCancoderOffset = 0;
-  private final double change2AngularVelocity = 1*2*Math.PI/60;
 
   public ShooterSubsystem() {
     shooterTurnMotor.restoreFactoryDefaults();
@@ -74,14 +70,18 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shooterMotorTurn(){
-    if(shooterTurnSpeed > (ShooterConstants.shooterSpeedSetpoint - 100)){
-      shooterTransportMotor.setVoltage(6);
-      shooterTransportMotor.setVoltage(6);
+    if(shooterTurnSpeed >= (ShooterConstants.shooterSpeedSetpoint - 200)){
+      shooterTransportMotor.setVoltage(9.6);
+      shooterTransportSpeed = 6;
     }
     else{
-      shooterTurnMotor.setVoltage(9.6 + shooterTurnPIDOutput);
-      shooterTransportMotor.setVoltage(0);
+      shooterTurnMotor.setVoltage(9.6);
+      shooterTransportSpeed = 0;
     }
+  }
+
+  public void shooterTransportMotorSpeed(double speed){
+    shooterTransportSpeed = speed;
   }
 
   public void getShooterShaftsetpoint(double angleSetpoint){
@@ -89,21 +89,19 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    haveNote = redline.get();
     shooterShaftAngle = shooterShaftCancoder.getAbsolutePosition().getValueAsDouble();
-    shooterShaftRadians = Math.toRadians(shooterShaftAngle);
-    shooterShaftAngularVelocity = shooterSheftEncoder.getVelocity()*change2AngularVelocity;
     shooterTurnSpeed = shooterTurnEncoder.getVelocity();
     shooterShaftErrorvalue = shooterShaftSetpoint - shooterShaftAngle;
 
-    shooterTurnPIDOutput = shooterTurnPID.calculate(shooterTurnSpeed, ShooterConstants.shooterSpeedSetpoint);
     shooterShaftPIDOutput = shooterShaftPID.calculate(shooterShaftAngle, shooterShaftSetpoint);
-    shooterShaftFeedforwardOutput = shooterShaftFeedforward.calculate(shooterShaftRadians, shooterShaftAngularVelocity)/12;
 
     if(shooterShaftErrorvalue > 2){
-      shooterShafMotor.set(shooterShaftPIDOutput + shooterShaftFeedforwardOutput);
+      shooterShafMotor.set(shooterShaftPIDOutput);
     }
     else{
-      shooterShafMotor.set(shooterShaftFeedforwardOutput);
+      shooterShafMotor.set(0);
     }
+    shooterTransportMotor.set(shooterTransportSpeed);
   }
 }

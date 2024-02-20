@@ -5,31 +5,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import static frc.robot.Constants.*;
-import static frc.robot.Constants.ApriltagConstants;
 import static frc.robot.Constants.ApriltagConstants.blueModeSelect;
 import static frc.robot.Constants.ApriltagConstants.redModeSelect;
 
 public class AimCommand extends Command {
   /** Creates a new AimCommand. */
   private final VisionSubsystem visionSubsystem;
-  private final ShooterSubsystem shooterSubsystem;
   private final SwerveSubsystem swerveSubsystem;
   private double xSpeed;
   private double ySpeed;
   private double zSpeed;
-  private double shooterSetpoint;
   private double setpoint[];
-  public AimCommand(VisionSubsystem _visionSubsystem, ShooterSubsystem _shooterSubsystem, SwerveSubsystem __swerveSubsystem) {
+  public AimCommand(VisionSubsystem _visionSubsystem, SwerveSubsystem __swerveSubsystem) {
     this.visionSubsystem = _visionSubsystem;
-    this.shooterSubsystem = _shooterSubsystem;
     this.swerveSubsystem = __swerveSubsystem;
-    addRequirements(visionSubsystem, shooterSubsystem, swerveSubsystem);
+    addRequirements(visionSubsystem, swerveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -47,7 +40,6 @@ public class AimCommand extends Command {
       setpoint = blueModeSelect(visionSubsystem.targetID);
     }
     visionSubsystem.getSetpoint(setpoint);
-    shooterSubsystem.getShooterShaftsetpoint(setpoint[4]);
     xSpeed = visionSubsystem.xMovePIDOutput;
     ySpeed = visionSubsystem.yMovePIDOutput;
     zSpeed = visionSubsystem.turnPIDOutput;

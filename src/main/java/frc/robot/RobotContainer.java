@@ -47,19 +47,15 @@ public class RobotContainer {
       m_swerveSubsystem.resetGyro();
     }));
 
-    armJoystick.leftBumper().onTrue(Commands.runOnce(()->{
-      m_climbSubsystem.climbComplete();
-    }, m_climbSubsystem));
-
     armJoystick.rightTrigger(0.4).whileTrue(Commands.run(()->{
       m_shooterSubsystem.shooterMotorTurn();
     }, m_shooterSubsystem));
 
-    armJoystick.x().onTrue(new IntakeCommand(m_intakeSubsystem, IntakeConstants.intakeInPosition, true));
-    armJoystick.b().onTrue(new IntakeCommand(m_intakeSubsystem, IntakeConstants.intakePrimetivePosition, false));
+    armJoystick.x().onTrue(new IntakeCommand(m_intakeSubsystem, m_shooterSubsystem, IntakeConstants.intakeInPosition, true, 6));
+    armJoystick.b().onTrue(new IntakeCommand(m_intakeSubsystem, m_shooterSubsystem, IntakeConstants.intakePrimetivePosition, false, 0));
     armJoystick.y().onTrue(new ShooterCommand(m_shooterSubsystem, ShooterConstants.shooterAMPSetpoint));
     armJoystick.a().onTrue(new ShooterCommand(m_shooterSubsystem, ShooterConstants.shooterPrimetivePosition));
-    baseJoystick.leftTrigger(0.4).whileTrue(new AimCommand(m_visionSubsystem, m_shooterSubsystem, m_swerveSubsystem));
+    baseJoystick.leftTrigger(0.4).whileTrue(new AimCommand(m_visionSubsystem, m_swerveSubsystem));
 
   }
 

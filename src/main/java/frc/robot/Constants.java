@@ -26,6 +26,28 @@ public final class Constants {
     return Math.min(maxOutput, Math.max(value, -maxOutput));
   }
 
+  public static double climbMotorSpeed(double motorSpeed, boolean climbLimitLow, double climbLimitHigh, double climbPosition){
+      if(climbLimitLow){
+        if(motorSpeed < 0){
+          return 0;
+        }
+        else{
+          return motorSpeed;
+        }
+      }
+      else if(climbPosition >= climbLimitHigh){
+        if(motorSpeed > 0){
+          return 0;
+        }
+        else{
+          return motorSpeed;
+        }
+      }
+      else{
+        return motorSpeed;
+      }
+    }
+
   public static final class JoystickButtonNumbers{
     public static final int shootButtonNumber = 6;
     public static final int inButtonNumber = 2;
@@ -42,8 +64,9 @@ public final class Constants {
   }
 
   public static final class ShooterConstants{
-    public static final double shooterPrimetivePosition = 0.0;
-    public static final double shooterAMPSetpoint = 0.0;
+    public static final double shooterPrimetivePosition = 0;
+    public static final double shooterAMPSetpoint = 0;
+    public static final double shooterSpeakerSetpopint = 0;
     public static final double shooterSpeedSetpoint = 4580;
   }
 
@@ -55,7 +78,7 @@ public final class Constants {
     public static final int blueSourceLeftID = 2;
 
     public static final int redSpeakerCenterID = 4;
-    public static final int redRightSpeakerID = 3;
+    public static final int redSpeakerRightID = 3;
     public static final int redAMPID = 5;
     public static final int redSourceRightID = 9;
     public static final int redSourceLeftID = 10;
@@ -63,40 +86,50 @@ public final class Constants {
     public static final double speakerHeight = 204.5;//cm
     public static final double armHeight = 28.16;//cm
 
-    public static final double limelightToArmDistance = 0;
-    public static final double armAndEndEffectorAngle = 120.0;
-
     public static double[] redModeSelect(int targetID){
       double[] setpoint;
       switch (targetID) {
         case redAMPID:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
         case redSourceLeftID:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
-        case redSpeakerCenterID,redRightSpeakerID , redSourceRightID:
-          setpoint = new double[]{0,0,0,0}; 
+        case redSourceRightID:
+          setpoint = new double[]{0, 0, 0};
+          break;
+        case redSpeakerRightID:
+          setpoint = new double[]{0, 0, 0};
+          break;
+        case redSpeakerCenterID:
+          setpoint = new double[]{0, 0, 0}; 
         default:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
         
       }
       return setpoint;
     }
+    
     public static double[] blueModeSelect(int targetID){
       double[] setpoint;
       switch (targetID) {
         case blueAMPID:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
         case blueSourceLeftID:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
-        case blueSpeakerCenterID, blueSpeakerLeftID, bluesourceRightID:
-          setpoint = new double[]{0,0,0,0}; 
+        case bluesourceRightID:
+          setpoint = new double[]{0, 0, 0};
+          break;
+        case blueSpeakerCenterID:
+          setpoint = new double[]{0, 0, 0};
+          break;
+        case blueSpeakerLeftID:
+          setpoint = new double[]{0, 0, 0}; 
         default:
-          setpoint = new double[]{0, 0, 0, 0};
+          setpoint = new double[]{0, 0, 0};
           break;
         
       }
